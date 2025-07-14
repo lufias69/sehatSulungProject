@@ -8,7 +8,7 @@ from .views import (
     QuestionCategoryViewSet,
     QuestionViewSet,
     ChoiceViewSet, CheckupCategoryViewSet, FeatureViewSet, TableHashViewSet, ProvinsiViewSet, KabupatenKotaViewSet,
-    KecamatanViewSet, ModifiedTableHashViewSet
+    KecamatanViewSet, ModifiedTableHashViewSet, TaskViewSet
 )
 
 router = DefaultRouter()
@@ -23,6 +23,7 @@ router.register(r'provinsi', ProvinsiViewSet)
 router.register(r'kabupaten-kota', KabupatenKotaViewSet)
 router.register(r'kecamatan', KecamatanViewSet)
 router.register(r'modified-table-hashes', ModifiedTableHashViewSet)
+router.register(r'tasks', TaskViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),

@@ -7,12 +7,13 @@ from rest_framework import permissions
 from alamat_app.models import Provinsi, KabupatenKota, Kecamatan
 from hash_app.models import TableHash, ModifiedTableHash
 from question_app.models import QuestionType, QuestionCategory, Question, Choice
+from task_app.models import Task
 from .serializers import (
     QuestionTypeSerializer,
     QuestionCategorySerializer,
     QuestionSerializer,
     ChoiceSerializer, TableHashSerializer, ProvinsiSerializer, KabupatenKotaSerializer, KecamatanSerializer,
-    ModifiedTableHashSerializer
+    ModifiedTableHashSerializer, TaskSerializer
 )
 
 # class QuestionTypeViewSet(viewsets.ModelViewSet):
@@ -20,6 +21,10 @@ from .serializers import (
 #     serializer_class = QuestionTypeSerializer
 #     permission_classes = [IsAuthenticated]
 
+class TaskViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Task.objects.all()
+    serializer_class = TaskSerializer
+    permission_classes = [AllowAny]
 
 class QuestionTypeViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = QuestionType.objects.all()

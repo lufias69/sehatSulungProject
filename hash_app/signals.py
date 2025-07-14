@@ -7,6 +7,7 @@ from django.dispatch import receiver
 
 from alamat_app.models import Provinsi, KabupatenKota, Kecamatan, Desa
 from fitur_app.models import CheckupGroup, Feature, CheckupCategory
+from task_app.models import Task
 from .models import TableHash, ModifiedTableHash
 from question_app.models import QuestionType, QuestionCategory, Question, Choice
 
@@ -67,6 +68,7 @@ from .utils import generate_unique_hash
 @receiver(post_save, sender=KabupatenKota)
 @receiver(post_save, sender=Kecamatan)
 @receiver(post_save, sender=Desa)
+@receiver(post_save, sender=Task)
 def update_table_hash_on_question_save(sender, instance, created, **kwargs):
     """
     Fungsi ini akan dijalankan setiap kali data disimpan (insert/update) pada model

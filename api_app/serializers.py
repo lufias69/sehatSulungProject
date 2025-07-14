@@ -5,6 +5,8 @@ from alamat_app.models import Provinsi, KabupatenKota, Kecamatan
 from fitur_app.models import CheckupCategory, Feature
 from hash_app.models import TableHash, ModifiedTableHash
 from question_app.models import QuestionType, QuestionCategory, Question, Choice
+from task_app.models import Task
+
 
 class QuestionTypeSerializer(serializers.ModelSerializer):
     class Meta:
@@ -77,3 +79,11 @@ class ModifiedTableHashSerializer(serializers.ModelSerializer):
         # Atau Anda bisa spesifikkan field yang ingin Anda tampilkan:
         # fields = ['id', 'model_name', 'table_hash', 'last_updated', 'content_hash']
         read_only_fields = ['model_name', 'table_hash', 'last_updated', 'content_hash'] # Opsional, untuk menegaskan read-only
+
+class TaskSerializer(serializers.ModelSerializer):
+    # features = serializers.PrimaryKeyRelatedField(queryset=Feature.objects.all(), many=True)
+    features = FeatureSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Task
+        fields = ['id', 'name', 'task_duration', 'features', 'created_at']
