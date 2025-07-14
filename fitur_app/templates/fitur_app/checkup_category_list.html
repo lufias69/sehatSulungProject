@@ -1,0 +1,24 @@
+<!-- checkup_category_list.html -->
+<h1>Daftar Kategori Pengecekan</h1>
+
+<a href="{% url 'fitur_app:checkup_category_create' %}">Tambah Kategori</a>
+
+<table>
+    <thead>
+        <tr>
+            <th>Nama Kategori</th>
+            <th>Aksi</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for category in categories %}
+            <tr>
+                <td>{{ category.nama_kategori }}</td>
+                <td>
+                    <a href="{% url 'fitur_app:checkup_category_update' category.id %}">Edit</a> |
+                    <a href="{% url 'fitur_app:checkup_category_delete' category.id %}" onclick="return confirm('Anda yakin ingin menghapus kategori ini?')">Hapus</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

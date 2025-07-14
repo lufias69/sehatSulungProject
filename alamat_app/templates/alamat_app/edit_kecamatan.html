@@ -1,0 +1,10 @@
+<!-- alamat_app/templates/alamat_app/edit_kecamatan.html -->
+<h1>Edit Kecamatan</h1>
+
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-success">Simpan Perubahan</button>
+</form>
+
+<a href="{% url 'alamat_app:provinsi_list' %}" class="btn btn-secondary">Kembali</a>

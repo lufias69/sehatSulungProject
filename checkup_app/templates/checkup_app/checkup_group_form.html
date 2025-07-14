@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulir Pengecekan Kesehatan - {{ kategori.nama_kategori }}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7fc;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 30px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        label {
+            font-size: 16px;
+            color: #555;
+            font-weight: bold;
+        }
+
+        input, select, button {
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus, button:focus {
+            outline: none;
+            border-color: #4CAF50;
+            box-shadow: 0 0 5px rgba(76, 175, 80, 0.4);
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .back-link a {
+            color: #4CAF50;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        .back-link a:hover {
+            text-decoration: underline;
+        }
+
+        .file-upload-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid #ddd;
+            padding: 12px;
+            border-radius: 6px;
+            background-color: #f9f9f9;
+        }
+
+        .file-upload-wrapper input[type="file"] {
+            border: none;
+            background: none;
+        }
+
+        .file-upload-wrapper .file-name {
+            color: #777;
+            font-size: 14px;
+        }
+
+        /* Error styling */
+        .error-messages {
+            color: red;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .error-messages li {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Formulir Pengecekan Kesehatan - {{ kategori.nama_kategori }}</h1>
+
+        <!-- Display form errors -->
+        {% if form.errors %}
+            <div class="error-messages">
+                <ul>
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <!-- Menyembunyikan kategori yang sudah terisi -->
+            {{ form.kategori }}
+
+            <!-- NIK (Hanya tampilkan jika kategori bukan Balita) -->
+            {% if kategori.nama_kategori != 'Balita' %}
+                <label for="nik">NIK:</label>
+                <input type="text" id="nik" name="nik" value="{{ form.nik.value }}" placeholder="Masukkan NIK Anda" required>
+            {% endif %}
+
+            <!-- Nama -->
+            <label for="nama">Nama {{ kategori.nama_kategori }}:</label>
+            <input type="text" id="nama" name="nama" value="{{ form.nama.value }}" placeholder="Masukkan Nama Anda" required>
+
+            <!-- Tanggal Lahir -->
+            <label for="tanggal_lahir">Tanggal Lahir {{ kategori.nama_kategori }}:</label>
+            <input type="date" id="tanggal_lahir" name="tanggal_lahir" value="{{ form.tanggal_lahir.value }}" placeholder="Pilih Tanggal Lahir" required>
+
+            <!-- Jenis Kelamin -->
+            <label>Jenis Kelamin {{ kategori.nama_kategori }}:</label>
+            <div>
+                <label><input type="radio" name="jenis_kelamin" value="L" {% if form.jenis_kelamin.value == "L" %}checked{% endif %}> Laki-Laki</label>
+            </div>
+            <div>
+                <label><input type="radio" name="jenis_kelamin" value="P" {% if form.jenis_kelamin.value == "P" %}checked{% endif %}> Perempuan</label>
+            </div>
+
+
+            <!-- Nama Ibu dan NIK Ibu (ditampilkan hanya jika kategori adalah Balita) -->
+            {% if kategori.nama_kategori == 'Balita' %}
+                <label for="nama_ibu">Nama Ibu:</label>
+                <input type="text" id="nama_ibu" name="nama_ibu" value="{{ form.nama_ibu.value }}" placeholder="Masukkan Nama Ibu" required>
+
+                <label for="nik_ibu">NIK Ibu:</label>
+                <input type="text" id="nik_ibu" name="nik_ibu" value="{{ form.nik_ibu.value }}" placeholder="Masukkan NIK Ibu" required>
+            {% endif %}
+
+            <!-- Upload Foto (Optional) -->
+            <label for="foto">Upload Foto {{ kategori.nama_kategori }} (Optional):</label>
+            <div class="file-upload-wrapper">
+                <input type="file" id="foto" name="foto">
+                <span class="file-name">{{ form.foto.value|default:"No file chosen" }}</span>
+            </div>
+
+            <!-- Provinsi -->
+        <div class="mb-3">
+            <label for="provinsi" class="form-label">Pilih Provinsi:</label>
+            <select id="provinsi" name="provinsi" class="form-control">
+                <option value="">Pilih Provinsi</option>
+                {% for provinsi in provinsi_list %}
+                    <option value="{{ provinsi.id }}">{{ provinsi.nama }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Kabupaten (Dynamic) -->
+        <div class="mb-3">
+            <label for="kabupaten" class="form-label">Pilih Kabupaten:</label>
+            <select id="kabupaten" name="kabupaten" class="form-control" disabled>
+                <option value="">Pilih Kabupaten</option>
+            </select>
+        </div>
+
+        <!-- Kecamatan (Dynamic) -->
+        <div class="mb-3">
+            <label for="kecamatan" class="form-label">Pilih Kecamatan:</label>
+            <select id="kecamatan" name="kecamatan" class="form-control" disabled>
+                <option value="">Pilih Kecamatan</option>
+            </select>
+        </div>
+
+        <!-- Desa (Dynamic) -->
+        <div class="mb-3">
+            <label for="desa_id" class="form-label">Pilih Desa:</label>
+            <select id="desa" name="desa" class="form-control" disabled>
+                <option value="">Pilih Desa</option>
+            </select>
+        </div>
+
+            <!-- Submit Button -->
+            <button type="submit">Simpan</button>
+        </form>
+
+        <div class="back-link">
+            <a href="{% url 'checkup_app:select_category' %}"><i class="fas fa-arrow-left"></i> Kembali</a>
+        </div>
+    </div>
+<script>
+    // Fetch Kabupaten based on Provinsi selection
+    $('#provinsi').on('change', function () {
+        var provinsi_id = $(this).val();
+        if (provinsi_id) {
+            $.ajax({
+                url: '{% url "alamat_app:filter_kabupaten" %}',
+                data: { 'provinsi_id': provinsi_id },
+                success: function (data) {
+                    $('#kabupaten').empty().append('<option value="">Pilih Kabupaten</option>');
+                    $.each(data, function (key, value) {
+                        $('#kabupaten').append('<option value="' + value.id + '">' + value.nama + '</option>');
+                    });
+                    $('#kabupaten').prop('disabled', false); // Enable Kabupaten dropdown
+                }
+            });
+        }
+    });
+
+    // Fetch Kecamatan based on Kabupaten selection
+    $('#kabupaten').on('change', function () {
+        var kabupaten_kota_id = $(this).val();
+        if (kabupaten_kota_id) {
+            $.ajax({
+                url: '{% url "alamat_app:filter_kecamatan" %}',
+                data: { 'kabupaten_kota_id': kabupaten_kota_id },
+                success: function (data) {
+                    $('#kecamatan').empty().append('<option value="">Pilih Kecamatan</option>');
+                    $.each(data, function (key, value) {
+                        $('#kecamatan').append('<option value="' + value.id + '">' + value.nama + '</option>');
+                    });
+                    $('#kecamatan').prop('disabled', false); // Enable Kecamatan dropdown
+                }
+            });
+        }
+    });
+
+    // Fetch Desa based on Kecamatan selection
+    $('#kecamatan').on('change', function () {
+        var kecamatan_id = $(this).val();
+        if (kecamatan_id) {
+            $.ajax({
+                url: '{% url "alamat_app:filter_desa" %}',
+                data: { 'kecamatan_id': kecamatan_id },
+                success: function (data) {
+                    $('#desa').empty().append('<option value="">Pilih Desa</option>');
+                    $.each(data, function (key, value) {
+                        $('#desa').append('<option value="' + value.id + '">' + value.nama + '</option>');
+                    });
+                    $('#desa').prop('disabled', false); // Enable Desa dropdown
+                }
+            });
+        }
+    });
+</script>
+
+</body>
+</html>

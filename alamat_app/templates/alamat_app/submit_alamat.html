@@ -1,0 +1,6 @@
+<!-- alamat_app/templates/alamat_app/submit_alamat.html -->
+<form method="POST" action="{% url 'alamat_app:submit_alamat' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Submit</button>
+</form>

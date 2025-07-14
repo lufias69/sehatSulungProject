@@ -1,0 +1,89 @@
+<!-- question_app/templates/question_app/view_question_type_category.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Question Types and Categories</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1 class="my-4">Question Types and Categories</h1>
+
+        <!-- Button to Add Question Type and Category -->
+{#        <div class="mb-3">#}
+{#            <a href="{% url 'question_app:create_question_type' %}" class="btn btn-success">Add Question Type</a>#}
+{#            <a href="{% url 'question_app:create_question_category' %}" class="btn btn-success">Add Question Category</a>#}
+{#        </div>#}
+
+        <!-- Display Question Types in a Table -->
+        <h2>Question Types</h2>
+        <!-- Button to Add Question Type and Category -->
+        <div class="mb-3">
+            <a href="{% url 'question_app:create_question_type' %}" class="btn btn-success">Add Question Type</a>
+        </div>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for question_type in question_types %}
+                    <tr>
+                        <td>{{ question_type.name }}</td>
+                        <td>{{ question_type.description }}</td>
+                        <td>
+                            <a href="{% url 'question_app:edit_question_type' question_type.pk %}" class="btn btn-warning btn-sm">Edit</a>
+                            <a href="{% url 'question_app:delete_question_type' question_type.pk %}" class="btn btn-danger btn-sm">Delete</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Display Question Categories in a Table -->
+        <h2 class="mt-4">Question Categories</h2>
+        <!-- Button to Add Question Type and Category -->
+        <div class="mb-3">
+
+            <a href="{% url 'question_app:create_question_category' %}" class="btn btn-success">Add Question Category</a>
+        </div>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>Description</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for question_category in question_categories %}
+                    <tr>
+                        <td>{{ question_category.name }}</td>
+                        <td>
+                            {% if question_category.age %}
+                                {{ question_category.age }}
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </td>
+                        <td>{{ question_category.description }}</td>
+                        <td>
+                            <a href="{% url 'question_app:edit_question_category' question_category.pk %}" class="btn btn-warning btn-sm">Edit</a>
+                            <a href="{% url 'question_app:delete_question_category' question_category.pk %}" class="btn btn-danger btn-sm">Delete</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

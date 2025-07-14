@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ feature.name }} Detail</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container py-4">
+        <h1 class="mb-4">{{ feature.name }} - {{ feature.kategori }}</h1>
+
+        <!-- Menampilkan gambar fitur -->
+        <div class="card mb-4 shadow-sm border border-secondary">
+            <img src="{{ feature.image.url }}" class="card-img-top" alt="{{ feature.name }}" style="height: 300px; object-fit: cover;">
+            <div class="card-body">
+                <h5 class="card-title">Deskripsi</h5>
+                <p class="card-text">{{ feature.description }}</p>
+                <a href="{% url 'fitur_app:edit_feature' feature.pk %}" class="btn btn-warning me-2">Edit Feature</a>
+                <a href="{% url 'fitur_app:delete_feature' feature.pk %}" class="btn btn-danger">Delete Feature</a>
+            </div>
+        </div>
+
+        <!-- Tombol Tambah Pertanyaan -->
+        <div class="mb-4 text-end">
+            <a href="{% url 'question_app:create_question' %}?feature_id={{ feature.pk }}" class="btn btn-success">+ Add New Question</a>
+        </div>
+
+        <!-- Daftar Pertanyaan -->
+        <h3 class="mb-3">Questions (Total: {{ questions_count }})</h3>
+        <div class="row row-cols-1 g-4 mb-5">
+            {% for question in questions %}
+            <div class="col">
+                <div class="card shadow-sm border border-primary rounded-3">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <!-- Gambar Pertanyaan -->
+                            <div class="col-md-2 text-center">
+                                {% if question.image %}
+                                    <img src="{{ question.image.url }}" alt="{{ question.question_text }}" class="img-fluid img-thumbnail" style="max-height: 200px;">
+                                {% else %}
+                                    <div class="text-muted small">No Image</div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Detail Pertanyaan -->
+                            <div class="col-md-10">
+                                <p class="mb-1">
+                                    <span class="badge bg-primary">Type: {{ question.question_type.name }}</span>
+                                    <span class="badge bg-info text-dark">Category: {{ question.category.name }}</span>
+                                    <span class="badge bg-info-subtle text-dark">priority: {{ question.priority }}</span>
+                                </p>
+                                <h5 class="card-title">{{ question.question_text }}</h5>
+
+                                {% if question.choices.all %}
+                                    <p class="mt-2 mb-1"><strong>Choices:</strong></p>
+
+                                {% endif %}
+
+{#                                <ul class="list-group list-group-flush mb-2">#}
+{#                                    {% for choice_json in question.choice_json_list %}#}
+{#                                        {% if choice_json.label %}#}
+{#                                            <li class="list-group-item px-3 py-1">{{ choice_json.label }}</li>#}
+{#                                        {% else %}#}
+{#                                            <li class="list-group-item px-3 py-1">{{ choice_json }}</li>#}
+{#                                        {% endif %}#}
+{#                                    {% endfor %}#}
+{#                                </ul>#}
+
+                                <ul class="list-group list-group-flush">
+                                {% for choice in question.choices.all %}
+{#                                    <p>{{ choice_json }}</p>#}
+{#                                    {% for choice in choice_json %}#}
+                                        <li class="list-group-item">
+                                          <i class="bi bi-circle-fill text-primary me-2"></i> {{ choice }}
+                                        </li>
+{#                                    {% endfor %}#}
+                                {% endfor %}
+                            </ul>
+
+                                <div class="text-end mt-2">
+                                    <a href="{% url 'question_app:edit_question' feature.id question.id %}" class="btn btn-outline-warning btn-sm me-2">Edit</a>
+                                    <a href="{% url 'question_app:delete_question' feature.id question.id %}" class="btn btn-outline-danger btn-sm">Delete</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <!-- Tombol Tambah Pertanyaan -->
+        <div class="mb-4 text-end">
+            <a href="{% url 'question_app:create_question' %}?feature_id={{ feature.pk }}" class="btn btn-success">+ Add New Question</a>
+        </div>
+
+        <!-- Tombol Kembali -->
+        <div class="text-center">
+            <a href="{% url 'fitur_app:view_features' %}" class="btn btn-link mt-3">← Back to Feature List</a>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+
+
+
+{##}
+{#<!DOCTYPE html>#}
+{#<html lang="en">#}
+{#<head>#}
+{#    <meta charset="UTF-8" />#}
+{#    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>#}
+{#    <title>{{ feature.name }} Detail</title>#}
+{#    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">#}
+{#</head>#}
+{#<body>#}
+{#<div class="container py-4">#}
+{#    <h1 class="mb-4">{{ feature.name }} - Detail</h1>#}
+{##}
+{#    <!-- Gambar Fitur -->#}
+{#    <div class="card mb-5 shadow-sm">#}
+{#        <img src="{{ feature.image.url }}" class="card-img-top" alt="{{ feature.name }}" style="height: 300px; object-fit: cover;">#}
+{#        <div class="card-body">#}
+{#            <h5 class="card-title">Deskripsi Fitur</h5>#}
+{#            <p class="card-text">{{ feature.description }}</p>#}
+{#            <div class="d-flex gap-2">#}
+{#                <a href="{% url 'fitur_app:edit_feature' feature.pk %}" class="btn btn-warning">Edit Feature</a>#}
+{#                <a href="{% url 'fitur_app:delete_feature' feature.pk %}" class="btn btn-danger">Delete Feature</a>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+{##}
+{#    <!-- Tombol Tambah Question -->#}
+{#    <div class="mb-4 text-end">#}
+{#        <a href="{% url 'question_app:create_question' %}?feature_id={{ feature.pk }}" class="btn btn-success">+ Add New Question</a>#}
+{#    </div>#}
+{##}
+{#    <!-- Daftar Pertanyaan -->#}
+{#    <h3 class="mb-3">Questions (Total: {{ questions_count }})</h3>#}
+{##}
+{#    <div class="row row-cols-1 g-4 mb-5">#}
+{#        {% for question in questions %}#}
+{#        <div class="col">#}
+{#            <div class="card shadow-sm border-0">#}
+{#                <div class="card-body">#}
+{#                    <div class="d-flex justify-content-between align-items-start">#}
+{#                        <div class="flex-grow-1">#}
+{#                            <h5 class="card-title">{{ question.question_text }}</h5>#}
+{##}
+{#                            {% if question.image %}#}
+{#                                <img src="{{ question.image.url }}" alt="{{ question.question_text }}" width="60" height="60" class="img-thumbnail mb-2">#}
+{#                            {% endif %}#}
+{##}
+{#                            <p><span class="badge bg-primary">Type: {{ question.question_type.name }}</span></p>#}
+{#                            <p><span class="badge bg-info text-dark">Category: {{ question.category.name }}</span></p>#}
+{##}
+{#                            <p class="mt-3 mb-1"><strong>Choices:</strong></p>#}
+{#                            <ul class="list-group list-group-flush">#}
+{#                                {% for choice_json in question.choice_json_list %}#}
+{#                                    {% for choice in choice_json %}#}
+{#                                        <li class="list-group-item">{{ choice }}</li>#}
+{#                                    {% endfor %}#}
+{#                                {% endfor %}#}
+{#                            </ul>#}
+{#                        </div>#}
+{##}
+{#                        <div class="text-end ms-3">#}
+{#                            <a href="{% url 'question_app:edit_question' feature.id question.id %}" class="btn btn-sm btn-outline-warning mb-1">Edit</a><br>#}
+{#                            <a href="{% url 'question_app:delete_question' feature.id question.id %}" class="btn btn-sm btn-outline-danger">Delete</a>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{#        {% endfor %}#}
+{#    </div>#}
+{##}
+{#    <!-- Tombol kembali -->#}
+{#    <div class="text-start">#}
+{#        <a href="{% url 'fitur_app:view_features' %}" class="btn btn-link">← Back to Feature List</a>#}
+{#    </div>#}
+{#</div>#}
+{##}
+{#<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>#}
+{#</body>#}
+{#</html>#}
+
+
+{#<!-- fitur_app/templates/fitur_app/feature_detail.html -->#}
+{##}
+{#<!DOCTYPE html>#}
+{#<html lang="en">#}
+{#<head>#}
+{#    <meta charset="UTF-8">#}
+{#    <meta name="viewport" content="width=device-width, initial-scale=1.0">#}
+{#    <title>{{ feature.name }} Detail</title>#}
+{#    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">#}
+{#</head>#}
+{#<body>#}
+{#    <div class="container">#}
+{#        <h1 class="my-4">{{ feature.name }} - Detail</h1>#}
+{##}
+{#        <!-- Menampilkan gambar fitur -->#}
+{#        <div class="card mb-4">#}
+{#            <img src="{{ feature.image.url }}" class="card-img-top" alt="{{ feature.name }}" style="height: 300px; object-fit: cover;">#}
+{#            <div class="card-body">#}
+{#                <h5 class="card-title">Description</h5>#}
+{#                <p class="card-text">{{ feature.description }}</p>#}
+{#                <a href="{% url 'fitur_app:edit_feature' feature.pk %}" class="btn btn-warning">Edit Feature</a>#}
+{#                <a href="{% url 'fitur_app:delete_feature' feature.pk %}" class="btn btn-danger">Delete Feature</a>#}
+{#            </div>#}
+{#        </div>#}
+{##}
+{#        <!-- Menampilkan Tombol untuk Menambahkan Question -->#}
+{#        <div class="mb-4">#}
+{#            <a href="{% url 'question_app:create_question' %}?feature_id={{ feature.pk }}" class="btn btn-success">Add New Question</a>#}
+{#        </div>#}
+{##}
+{#        <!-- Menampilkan Jumlah Pertanyaan -->#}
+{#        <h3>Questions (Total: {{ questions_count }})</h3>#}
+{#        <ul class="list-group mb-4">#}
+{#            {% for question in questions %}#}
+{#                <li class="list-group-item">#}
+{#                    <div class="d-flex justify-content-between">#}
+{#                        <div>#}
+{#                            <h5>{{ question.question_text }}</h5>#}
+{##}
+{#                            {% if question.image %}#}
+{#                                <img src="{{ question.image.url }}" alt="{{ question.question_text }}" width="50" height="50" class="img-thumbnail">#}
+{#                            {% endif %}#}
+{##}
+{#                            <p><strong>Type:</strong> {{ question.question_type.name }}</p>#}
+{#                            <p><strong>Category:</strong> {{ question.category.name }}</p>#}
+{#                            <p><strong>Choice:</strong> {{ question.choice_json_list }}</p>#}
+{#                            <p><strong>Choice:</strong> </p>#}
+{##}
+{#                            {% for choice_json in question.choice_json_list %}#}
+{#                                {% for choice in choice_json %}#}
+{#                                    <li>{{ choice }}</li>#}
+{#                                {% endfor %}#}
+{#                            {% endfor %}#}
+{#                        </div>#}
+{##}
+{#                        <div>#}
+{#                            <a href="{% url 'question_app:edit_question' feature.id question.id %}" class="btn btn-warning btn-sm">Edit</a>#}
+{#                            <a href="{% url 'question_app:delete_question' feature.id question.id %}" class="btn btn-danger btn-sm">Delete</a>#}
+{#                            <a href="{% url 'question_app:edit_question' question.pk %}" class="btn btn-warning btn-sm">Edit</a>#}
+{#                            <a href="{% url 'question_app:delete_question' question.pk %}" class="btn btn-danger btn-sm">Delete</a>#}
+{#                            <a href="{% url 'question_app:question_detail' question.pk %}" class="btn btn-info btn-sm">Detail</a>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </li>#}
+{#            {% endfor %}#}
+{#        </ul>#}
+{##}
+{#        <!-- Tombol kembali ke daftar fitur -->#}
+{#        <a href="{% url 'fitur_app:view_features' %}" class="btn btn-link mt-3">Back to Feature List</a>#}
+{#    </div>#}
+{##}
+{#    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>#}
+{#</body>#}
+{#</html>#}

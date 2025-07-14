@@ -1,0 +1,38 @@
+version: '3.9'
+
+services:
+  web:
+    build: .
+    container_name: sehat_sulung_web
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    expose:
+      - "8000"
+    depends_on:
+      - db
+
+  db:
+    image: postgres:14
+    container_name: sehat_sulung_db
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+
+  nginx:
+    image: nginx:latest
+    container_name: sehat_sulung_nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+      - .:/app
+    depends_on:
+      - web
+
+volumes:
+  postgres_data:

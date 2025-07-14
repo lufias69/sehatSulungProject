@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar Provinsi, Kabupaten, Kecamatan, Desa</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+            padding-top: 20px;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .action-buttons a {
+            margin-right: 10px;
+        }
+
+        .action-buttons {
+            margin-bottom: 15px;
+        }
+
+        .btn-sm {
+            font-size: 0.875rem;
+            padding: 5px 10px;
+        }
+
+        /* Table Styling */
+        table {
+            width: 100%;
+            margin-bottom: 20px;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .btn-hover {
+            transition: all 0.3s ease;
+        }
+
+        .btn-hover:hover {
+            background-color: #63d2e6; /* Darker color on hover */
+            transform: scale(1.05); /* Slight size increase on hover */
+        }
+
+        .nested-table {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Daftar Provinsi dan Wilayah</h1>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Provinsi</th>
+{#                <th>Aksi</th>#}
+            </tr>
+        </thead>
+        <tbody>
+            {% for provinsi in provinsi_list %}
+                <tr>
+                    <td>
+                        <H2>{{ provinsi.nama }}</H2>
+                        <div class="action-buttons d-flex gap-2">
+                            <a href="{% url 'alamat_app:edit_provinsi' provinsi.id %}" class="btn btn-warning btn-sm btn-hover">Edit Provinsi</a>
+                            <a href="{% url 'alamat_app:delete_provinsi' provinsi.id %}" class="btn btn-danger btn-sm btn-hover" onclick="return confirm('Apakah Anda yakin ingin menghapus provinsi ini?')">Hapus Provinsi</a>
+                            <a href="{% url 'alamat_app:add_kabupaten' provinsi.id %}" class="btn btn-primary btn-sm btn-hover">Tambah Kabupaten</a>
+                        </div>
+
+                        <!-- Display Kabupaten/Kota for this Provinsi -->
+                        <table class="table table-bordered nested-table">
+                            <thead>
+                                <tr>
+                                    <th>Kabupaten/Kota</th>
+{#                                    <th>Kecamatan</th>#}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for kabupaten in provinsi.kabupaten_kota.all %}
+                                    <tr>
+                                        <td>
+                                            <H3>{{ kabupaten.nama }}</H3>
+                                            <div class="action-buttons">
+                                                <a href="{% url 'alamat_app:edit_kabupaten' kabupaten.id %}" class="btn btn-warning btn-sm btn-hover">Edit Kabupaten</a>
+                                                <a href="{% url 'alamat_app:delete_kabupaten' kabupaten.id %}" class="btn btn-danger btn-sm btn-hover" onclick="return confirm('Apakah Anda yakin ingin menghapus kabupaten ini?')">Hapus Kabupaten</a>
+                                                <a href="{% url 'alamat_app:add_kecamatan' kabupaten.id %}" class="btn btn-primary btn-sm btn-hover">Tambah Kecamatan</a>
+                                            </div>
+
+                                        </td>
+
+                                        <td>
+
+
+                                            <!-- Display Kecamatan for this Kabupaten -->
+                                            <table class="table table-bordered nested-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Kecamatan</th>
+                                                        <th>Daftar Desa</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for kecamatan in kabupaten.kecamatan.all %}
+                                                        <tr>
+                                                            <td><h4>{{ kecamatan.nama }}</h4>
+                                                                <div class="action-buttons">
+                                                                    <a href="{% url 'alamat_app:edit_kecamatan' kecamatan.id %}" class="btn btn-warning btn-sm btn-hover">Edit Kecamatan</a>
+                                                                    <a href="{% url 'alamat_app:delete_kecamatan' kecamatan.id %}" class="btn btn-danger btn-sm btn-hover" onclick="return confirm('Apakah Anda yakin ingin menghapus kecamatan ini?')">Hapus Kecamatan</a>
+                                                                    <a href="{% url 'alamat_app:add_desa' kecamatan.id %}" class="btn btn-primary btn-sm btn-hover">Tambah Desa</a>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+
+
+                                                                <!-- Display Desa for this Kecamatan -->
+                                                                <table class="table table-bordered nested-table">
+                                                                    <thead>
+                                                                        <tr>
+{#                                                                            <th>Desa</th>#}
+{#                                                                            <th>Aksi</th>#}
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        {% for desa in kecamatan.desa.all %}
+                                                                            <tr>
+                                                                                <td><h6>{{ desa.nama }}</h6></td>
+                                                                                <td>
+                                                                                    <div class="action-buttons">
+                                                                                        <a href="{% url 'alamat_app:edit_desa' desa.id %}" class="btn btn-warning btn-sm btn-hover">Edit Desa</a>
+                                                                                        <a href="{% url 'alamat_app:delete_desa' desa.id %}" class="btn btn-danger btn-sm btn-hover" onclick="return confirm('Apakah Anda yakin ingin menghapus desa ini?')">Hapus Desa</a>
+                                                                                    </div>
+                                                                                </td>
+                                                                            </tr>
+                                                                        {% endfor %}
+                                                                    </tbody>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </td>
+
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Button for adding new Provinsi -->
+    <div class="text-center">
+        <a href="{% url 'alamat_app:add_provinsi' %}" class="btn btn-success btn-lg">Tambah Provinsi Baru</a>
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+
+</body>
+</html>

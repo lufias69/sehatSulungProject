@@ -1,0 +1,22 @@
+<!-- alamat_app/templates/alamat_app/kabupaten_list.html -->
+<h1>Daftar Kabupaten/Kota</h1>
+
+{% for kabupaten in kabupaten_list %}
+    <div class="kabupaten-item">
+        <h2>{{ kabupaten.nama }}</h2>
+
+        <!-- Tombol Edit Kabupaten -->
+        <a href="{% url 'alamat_app:edit_kabupaten' kabupaten.id %}" class="btn btn-warning btn-sm">Edit Kabupaten</a>
+
+        <!-- Tombol Hapus Kabupaten -->
+        <a href="{% url 'alamat_app:delete_kabupaten' kabupaten.id %}" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus kabupaten ini?')">Hapus Kabupaten</a>
+
+        <a href="{% url 'alamat_app:kecamatan_list' kabupaten.id %}">Lihat Kecamatan</a>
+
+        <!-- Tombol untuk menambah Kecamatan untuk Kabupaten ini -->
+        <a href="{% url 'alamat_app:add_kecamatan' kabupaten.id %}" class="btn btn-info btn-sm">Tambah Kecamatan</a>
+    </div>
+{% endfor %}
+
+<!-- Tombol untuk menambah Kabupaten -->
+<a href="{% url 'alamat_app:add_kabupaten' provinsi.id %}" class="btn btn-primary btn-sm">Tambah Kabupaten</a>

@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Add / Edit Question</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+</head>
+<body>
+<div class="container my-4">
+  <h2>{{ question_id|default:'Add' }} Question for Feature: <strong>{{ feature.name }}</strong></h2>
+
+  <form id="questionForm" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="mb-3">
+      <label for="question_text" class="form-label">Question Text</label>
+      <textarea class="form-control" id="question_text" name="question_text" rows="3" required></textarea>
+    </div>
+
+    <div class="mb-3">
+      <label for="question_type" class="form-label">Question Type</label>
+      <select id="question_type" name="question_type" class="form-select" required>
+        <option value="">Select Question Type</option>
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label for="category" class="form-label">Category</label>
+      <select id="category" name="category" class="form-select" required>
+        <option value="">Select Category</option>
+      </select>
+    </div>
+
+    {% if question_data.image %}
+      <div class="mb-3">
+        <label class="form-label">Current Image:</label><br>
+        <img src="{{ question_data.image }}" alt="Current Image" style="max-width: 150px;" class="img-thumbnail">
+      </div>
+    {% endif %}
+
+    <div class="mb-3">
+      <label for="image" class="form-label">Upload Image</label>
+      <input class="form-control" type="file" id="image" name="image" accept="image/*">
+    </div>
+
+    {% if question_data.image %}
+      <div class="mb-3">
+        <label class="form-label">Current Image:</label><br>
+        <img src="{{ question_data.image }}" alt="Current Image" style="max-width: 150px;" class="img-thumbnail">
+      </div>
+    {% endif %}
+
+    <div id="choices-container" class="mb-3" style="display: none;">
+      <label class="form-label">Choices</label>
+      <div id="choices-list"></div>
+      <button type="button" id="add-choice" class="btn btn-secondary btn-sm mt-2">Add More Choices</button>
+    </div>
+
+    <!-- Priority Field -->
+    <div class="mb-3">
+      <label for="priority" class="form-label">Priority</label>
+      <input type="number" class="form-control" id="priority" name="priority" value="0" min="0" required />
+      <small class="form-text text-muted">Enter a priority value (0 for lowest priority).</small>
+    </div>
+
+    <button type="submit" class="btn btn-success mt-3">Submit Question</button>
+  </form>
+
+  <a href="{% url 'fitur_app:feature_detail' feature.pk %}" class="btn btn-link mt-3">← Back to Feature Detail</a>
+
+    <!-- Progress Bar -->
+    <div id="progress-bar-container" class="mt-3" style="display: none;">
+        <div class="progress">
+            <div id="progress-bar" class="progress-bar progress-bar-striped progress-bar-animated" style="width: 0%"></div>
+        </div>
+        <p id="progress-status" class="text-center mt-2">Submitting...</p>
+    </div>
+</div>
+
+<!-- Inject question_data from Django -->
+{% if question_data %}
+<script>
+  const questionData = {{ question_data|safe }};
+</script>
+{% else %}
+<script>
+  const questionData = null;
+</script>
+{% endif %}
+
+{#<!-- Tombol Buka Modal -->#}
+{#<div class="mb-3">#}
+{#  <label class="form-label">Image</label><br>#}
+{#  <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#imageModal">#}
+{#    Pilih / Upload Gambar#}
+{#  </button>#}
+{#  <input type="hidden" name="image" id="image_id">#}
+{#  <div id="image_preview" class="mt-2"></div>#}
+{#</div>#}
+{##}
+{#<!-- Modal Gambar -->#}
+{#<div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">#}
+{#  <div class="modal-dialog modal-xl modal-dialog-scrollable">#}
+{#    <div class="modal-content">#}
+{#      <div class="modal-header">#}
+{#        <h5 class="modal-title">Pilih atau Upload Gambar</h5>#}
+{#        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>#}
+{#      </div>#}
+{#      <div class="modal-body">#}
+{#        <div class="row mb-4">#}
+{#          {% for media in media_items %}#}
+{#            {% if media.media_type == 'image' %}#}
+{#              <div class="col-md-3 mb-3">#}
+{#                <img src="{{ media.file.url }}" class="img-thumbnail select-image" data-id="{{ media.id }}" data-url="{{ media.file.url }}" style="cursor:pointer;">#}
+{#              </div>#}
+{#            {% endif %}#}
+{#          {% endfor %}#}
+{#        </div>#}
+{##}
+{#        <hr>#}
+{##}
+{#        <h6 class="text-center">Atau Upload Gambar Baru</h6>#}
+{##}
+{#        <!-- Drag & Drop Upload -->#}
+{#        <div id="drop-zone" class="border p-4 text-center mb-3 rounded" style="cursor: pointer;">#}
+{#          <p>Tarik dan jatuhkan gambar di sini atau klik untuk memilih file</p>#}
+{#          <input type="file" id="image-upload" accept="image/*" style="display: none;">#}
+{#        </div>#}
+{##}
+{#        <div id="preview-container" class="text-center"></div>#}
+{#        <div class="text-center">#}
+{#          <button id="upload-button" class="btn btn-primary mt-2" disabled>Upload Gambar</button>#}
+{#        </div>#}
+{#      </div>#}
+{#    </div>#}
+{#  </div>#}
+{#</div>#}
+
+
+
+{#<!-- Modal -->#}
+{#<div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">#}
+{#  <div class="modal-dialog modal-lg">#}
+{#    <div class="modal-content">#}
+{#      <div class="modal-header">#}
+{#        <h5 class="modal-title">Pilih Gambar</h5>#}
+{#        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>#}
+{#      </div>#}
+{#      <div class="modal-body">#}
+{#        <div class="row">#}
+{#          {% for media in media_items %}#}
+{#          {% if media.media_type == 'image' %}#}
+{#          <div class="col-3 mb-3">#}
+{#            <img src="{{ media.file.url }}" class="img-thumbnail select-image" data-id="{{ media.id }}" data-url="{{ media.file.url }}" style="cursor: pointer;">#}
+{#          </div>#}
+{#          {% endif %}#}
+{#          {% endfor %}#}
+{#        </div>#}
+{#      </div>#}
+{#    </div>#}
+{#  </div>#}
+{#</div>#}
+
+<script>
+  const featureId = {{ feature.pk }};
+  const questionId = {{ question_id|default:"null" }};
+  const showChoicesFor = ['Multiple Choice', 'Checkbox'];
+  const questionTypeSelect = document.getElementById('question_type');
+  const categorySelect = document.getElementById('category');
+  const choicesContainer = document.getElementById('choices-container');
+  const choicesList = document.getElementById('choices-list');
+  const progressBarContainer = document.getElementById('progress-bar-container');
+  const progressBar = document.getElementById('progress-bar');
+  const progressStatus = document.getElementById('progress-status');
+
+  // Load question types
+  fetch('/question/api/question-types/')
+    .then(res => res.json())
+    .then(data => {
+      data.forEach(item => {
+        const opt = document.createElement('option');
+        opt.value = item.id;
+        opt.textContent = item.name;
+        questionTypeSelect.appendChild(opt);
+      });
+      if (questionData) {
+        questionTypeSelect.value = questionData.question_type;
+        handleQuestionTypeChange();
+      }
+    });
+
+  // Load categories
+  fetch('/question/api/question-categories/')
+    .then(res => res.json())
+    .then(data => {
+      data.forEach(item => {
+        const opt = document.createElement('option');
+        opt.value = item.id;
+        opt.textContent = item.name;
+        categorySelect.appendChild(opt);
+      });
+      if (questionData) {
+        categorySelect.value = questionData.category;
+      }
+    });
+
+  // Pre-fill form
+  if (questionData) {
+    document.getElementById('question_text').value = questionData.question_text;
+    if (questionData.choices && questionData.choices.length > 0) {
+      choicesContainer.style.display = 'block';
+      questionData.choices.forEach(choice => addChoiceInput(choice));
+    }
+  }
+
+  function addChoiceInput(value = "") {
+    const div = document.createElement('div');
+    div.className = 'input-group mb-2 choice-item';
+    div.innerHTML = `
+      <input type="text" class="form-control" name="choices" placeholder="Enter choice" value="${value}" />
+      <button type="button" class="btn btn-outline-danger delete-choice">×</button>
+    `;
+    choicesList.appendChild(div);
+    div.querySelector('.delete-choice').addEventListener('click', () => div.remove());
+  }
+
+  function handleQuestionTypeChange() {
+    const selectedText = questionTypeSelect.options[questionTypeSelect.selectedIndex].textContent;
+    if (showChoicesFor.includes(selectedText)) {
+      choicesContainer.style.display = 'block';
+      if (choicesList.children.length === 0) addChoiceInput();
+    } else {
+      choicesContainer.style.display = 'none';
+      choicesList.innerHTML = '';
+    }
+  }
+
+  questionTypeSelect.addEventListener('change', handleQuestionTypeChange);
+  document.getElementById('add-choice').addEventListener('click', () => addChoiceInput());
+
+  // Submit
+  {#document.getElementById('questionForm').addEventListener('submit', function(e) {#}
+  {#  e.preventDefault();#}
+  {#  const formData = new FormData(this);#}
+  {#  formData.append('feature', featureId);#}
+  {##}
+  {#  const selectedOption = questionTypeSelect.options[questionTypeSelect.selectedIndex];#}
+  {#  const selectedTypeName = selectedOption ? selectedOption.textContent : "";#}
+  {##}
+  {#  const choices = [];#}
+  {#  document.querySelectorAll('input[name="choices"]').forEach(input => {#}
+  {#    if (input.value.trim()) choices.push(input.value.trim());#}
+  {#  });#}
+  {##}
+  {#  if (showChoicesFor.includes(selectedTypeName) && choices.length === 0) {#}
+  {#    alert("Please add at least one choice for this question type.");#}
+  {#    return;#}
+  {#  }#}
+  {##}
+  {#  formData.append('choices_data', JSON.stringify(choices));#}
+  {##}
+  {#  const imageInput = document.getElementById('image');#}
+  {#  if (imageInput && imageInput.files.length > 0) {#}
+  {#    formData.append('image', imageInput.files[0]);#}
+  {#  }#}
+  {##}
+  {#  const url = questionId#}
+  {#    ? `/question/api/questions/${questionId}/`#}
+  {#    : `/question/api/questions/`;#}
+  {#  const method = questionId ? 'PUT' : 'POST';#}
+  {##}
+  {#  fetch(url, {#}
+  {#    method: method,#}
+  {#    headers: { 'X-CSRFToken': '{{ csrf_token }}' },#}
+  {#    body: formData#}
+  {#  })#}
+  {#  .then(res => res.ok ? res.json() : Promise.reject(res))#}
+  {#  .then(() => {#}
+  {#    alert(`Question ${questionId ? 'updated' : 'created'} successfully`);#}
+  {#    window.location.href = "{% url 'fitur_app:feature_detail' feature.pk %}";#}
+  {#  })#}
+  {#  .catch(err => {#}
+  {#    alert('Failed to submit question');#}
+  {#    console.error(err);#}
+  {#  });#}
+  {#});#}
+    // Submit form
+    document.getElementById('questionForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        // Show progress bar
+        progressBarContainer.style.display = 'block';
+        progressBar.style.width = '25%';
+        progressStatus.textContent = 'Uploading image...';
+
+        const formData = new FormData(this);
+        formData.append('feature', featureId);
+
+        const selectedOption = questionTypeSelect.options[questionTypeSelect.selectedIndex];
+        const selectedTypeName = selectedOption ? selectedOption.textContent : "";
+
+        const choices = [];
+        document.querySelectorAll('input[name="choices"]').forEach(input => {
+            if (input.value.trim()) choices.push(input.value.trim());
+        });
+
+        if (showChoicesFor.includes(selectedTypeName) && choices.length === 0) {
+            alert("Please add at least one choice for this question type.");
+            return;
+        }
+
+        formData.append('choices_data', JSON.stringify(choices));
+
+        const imageInput = document.getElementById('image');
+        if (imageInput && imageInput.files.length > 0) {
+            formData.append('image', imageInput.files[0]);
+        }
+
+        const url = questionId
+            ? `/question/api/questions/${questionId}/`
+            : `/question/api/questions/`;
+        const method = questionId ? 'PUT' : 'POST';
+
+        fetch(url, {
+            method: method,
+            headers: { 'X-CSRFToken': '{{ csrf_token }}' },
+            body: formData
+        })
+        .then(res => {
+            if (res.ok) {
+                progressBar.style.width = '100%';
+                progressStatus.textContent = 'Submission successful!';
+                setTimeout(() => {
+                    window.location.href = "{% url 'fitur_app:feature_detail' feature.pk %}";
+                }, 1000);
+            } else {
+                progressBar.style.width = '100%';
+                progressStatus.textContent = 'Failed to submit, please try again.';
+            }
+        })
+        .catch(err => {
+            progressBar.style.width = '100%';
+            progressStatus.textContent = 'Error during submission.';
+            console.error(err);
+        });
+    });
+
+</script>
+</body>
+</html>
+
+

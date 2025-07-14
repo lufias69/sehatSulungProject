@@ -1,0 +1,22 @@
+<!-- alamat_app/templates/alamat_app/kecamatan_list.html -->
+<h1>Daftar Kecamatan</h1>
+
+{% for kecamatan in kecamatan_list %}
+    <div class="kecamatan-item">
+        <h2>{{ kecamatan.nama }}</h2>
+
+        <!-- Tombol Edit Kecamatan -->
+        <a href="{% url 'alamat_app:edit_kecamatan' kecamatan.id %}" class="btn btn-warning btn-sm">Edit Kecamatan</a>
+
+        <!-- Tombol Hapus Kecamatan -->
+        <a href="{% url 'alamat_app:delete_kecamatan' kecamatan.id %}" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus kecamatan ini?')">Hapus Kecamatan</a>
+
+        <a href="{% url 'alamat_app:desa_list' kecamatan.id %}">Lihat Desa</a>
+
+        <!-- Tombol untuk menambah Desa untuk Kecamatan ini -->
+        <a href="{% url 'alamat_app:add_desa' kecamatan.id %}" class="btn btn-info btn-sm">Tambah Desa</a>
+    </div>
+{% endfor %}
+
+<!-- Tombol untuk menambah Kecamatan -->
+<a href="{% url 'alamat_app:add_kecamatan' kabupaten.id %}" class="btn btn-primary btn-sm">Tambah Kecamatan</a>

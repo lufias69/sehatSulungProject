@@ -1,0 +1,17 @@
+<!-- alamat_app/templates/alamat_app/desa_list.html -->
+<h1>Daftar Desa</h1>
+
+{% for desa in desa_list %}
+    <div class="desa-item">
+        <h2>{{ desa.nama }}</h2>
+
+        <!-- Tombol Edit Desa -->
+        <a href="{% url 'alamat_app:edit_desa' desa.id %}" class="btn btn-warning btn-sm">Edit Desa</a>
+
+        <!-- Tombol Hapus Desa -->
+        <a href="{% url 'alamat_app:delete_desa' desa.id %}" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus desa ini?')">Hapus Desa</a>
+    </div>
+{% endfor %}
+
+<!-- Tombol untuk menambah Desa -->
+<a href="{% url 'alamat_app:add_desa' kecamatan.id %}" class="btn btn-primary btn-sm">Tambah Desa</a>

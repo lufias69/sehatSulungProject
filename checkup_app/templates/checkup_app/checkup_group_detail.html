@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail Pengecekan Kesehatan - {{ group.kategori.nama_kategori }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .feature-item {
+            border: 2px solid #007bff;
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+
+        .feature-image {
+            max-width: 100px;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .feature-content {
+            margin-left: 10px;
+        }
+
+        .feature-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #007bff;
+        }
+
+        .feature-description {
+            font-size: 1rem;
+            color: #555;
+        }
+
+        .kotak {
+            margin: 10px;
+        }
+
+        .kotak-image {
+            flex: 0 0 100px;
+        }
+
+        .kotak-data, .kotak-analisis {
+            flex: 1;
+        }
+
+        .btn-hover:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Detail Pengecekan Kesehatan</h1>
+
+    <!-- Kategori dan Tanggal Lahir -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <p><strong>Nama:</strong> <span class="text-primary">{{ group.nama }}</span></p>
+            <p><strong>id {{ group.kategori.nama_kategori }}:</strong> <span class="text-primary">{{ group.id }}</span></p>
+            <p><strong>Kategori:</strong> <span class="text-primary">{{ group.kategori.nama_kategori }}</span></p>
+        </div>
+        <div class="col-md-6">
+            <p><strong>Tanggal Lahir:</strong> <span class="text-secondary">{{ group.tanggal_lahir }}</span></p>
+            <p><strong>Umur:</strong> <span class="text-secondary">{{ group.get_umur_terformat }}</span></p>
+            <p><strong>Jenis Kelamin:</strong> <span class="text-secondary">{{ group.jenis_kelamin }}</span></p>
+        </div>
+    </div>
+
+    <!-- Fitur yang Tersedia -->
+    <h2 class="mb-4">Fitur yang Tersedia untuk {{ group.kategori.nama_kategori }} umur {{ group.get_umur_terformat }}</h2>
+    <div class="row">
+        {% for fitur in fitur %}
+            <div class="col-md-12 feature-item">
+                <h3 class="feature-title">{{ fitur.name }}</h3>
+                <div class="d-flex">
+
+                    <!-- Gambar -->
+                    <div class="kotak kotak-image">
+                        <img src="{{ fitur.image.url }}" alt="{{ fitur.name }}" class="feature-image">
+                    </div>
+
+                    <!-- Deskripsi dan Syarat Umur -->
+                    <div class="kotak kotak-data">
+                        <p class="feature-description"><strong>Deskripsi:</strong> {{ fitur.description }}</p>
+                        <p class="feature-description"><strong>Syarat Umur:</strong> {{ fitur.min_age_in_days }} - {{ fitur.max_age_in_days }} Hari</p>
+                    </div>
+
+                    <!-- Data Terakhir dan Analisis -->
+                    <div class="kotak kotak-analisis">
+                        <h6 class="card-subtitle mb-2 text-muted">Data Terakhir:</h6>
+                        <p>{{ fitur.last_data }}</p>
+                        <h6 class="card-subtitle mb-2 text-muted">Analisis:</h6>
+{#                        <a href="{% url 'session_app:feedback' group.id fitur.  %}" class="btn btn-info btn-sm">Lihat Hasil</a>#}
+
+
+                    </div>
+                </div>
+
+                <!-- Tombol Mulai Pengecekan -->
+                <div class="text-center mt-4">
+{#                    <a href="{% url 'user_responses_app:start_checkup' feature_id=fitur.id checkup_group_id=group.id %}" class="btn btn-success btn-lg">#}
+{#                        <i class="fas fa-plus-circle"></i> Mulai Pengecekan#}
+                    </a>
+                    <a href="{% url 'session_app:answer_questions' pk=fitur.id checkup_group_id=group.id %}">Go to Answer Questions</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Bootstrap JS dan dependencies -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz4fnFO9gyb8U4CwDdg2I+Nf2p4g8roYkdG9du4/tXzU1v4wvQQl5P3j9p" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js" integrity="sha384-pzjw8f+ua7Kw1TIq0P3n7na2fDssCm5wh5p9gW5f5ELy4f9Hh7dle2e9bl6m8Y7P" crossorigin="anonymous"></script>
+
+</body>
+</html>
+
+
+
+{#<!DOCTYPE html>#}
+{#<html lang="id">#}
+{#<head>#}
+{#    <meta charset="UTF-8">#}
+{#    <meta name="viewport" content="width=device-width, initial-scale=1.0">#}
+{#    <title>Detail Pengecekan Kesehatan - {{ group.kategori.nama_kategori }}</title>#}
+{#    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEJxv3WKtW3tSxP7Ytr4+O1bt4d31W27KZrTEsC2gdVS2b8yQzyfxiyv3tDkH" crossorigin="anonymous">#}
+{#    <style>#}
+{#        .feature-item {#}
+{#            border: 2px solid #007bff; /* Border for the feature item */#}
+{#            border-radius: 8px;#}
+{#            padding: 0px;#}
+{#            margin-bottom: 10px;#}
+{#        }#}
+{##}
+{#        .feature-image {#}
+{#            max-width: 100px;  /* Set the maximum width of the image smaller */#}
+{#            height: auto;  /* Maintain aspect ratio */#}
+{#            border-radius: 8px;#}
+{#        }#}
+{##}
+{#        .feature-content {#}
+{#            margin-left: 10px;#}
+{#        }#}
+{##}
+{#        .feature-title {#}
+{#            font-size: 1.25rem;#}
+{#            font-weight: bold;#}
+{#        }#}
+{##}
+{#        .feature-description {#}
+{#            font-size: 1rem;#}
+{#            color: #555;#}
+{#        }#}
+{##}
+{#        .d-flex {#}
+{#            display: flex;#}
+{#            justify-content: space-between;#}
+{#        }#}
+{##}
+{#        .text-muted {#}
+{#            font-size: 0.9rem;#}
+{#        }#}
+{##}
+{#        .kotak {#}
+{#            margin: 0 10px; /* Adds space between boxes */#}
+{#        }#}
+{##}
+{#        /* Kotak Gambar (kecil) */#}
+{#        .kotak-image {#}
+{#            flex: 0 0 100px; /* Gambar memiliki lebar tetap */#}
+{#        }#}
+{##}
+{#        /* Kotak Data dan Analisis (besar) */#}
+{#        .kotak-data, .kotak-analisis {#}
+{#            flex: 1; /* Mengambil sisa ruang */#}
+{#        }#}
+{##}
+{#    </style>#}
+{#</head>#}
+{#<body>#}
+{##}
+{#<div class="container mt-5">#}
+{#    <h1 class="text-center mb-4">Detail Pengecekan Kesehatan</h1>#}
+{##}
+{#    <!-- Kategori dan Tanggal Lahir -->#}
+{#    <div class="row mb-4">#}
+{#        <div class="col-md-6">#}
+{#            <p><strong>Nama {{ group.kategori.nama_kategori }}:</strong> <span class="text-primary">{{ group.nama }}</span></p>#}
+{#            <p><strong>id {{ group.kategori.nama_kategori }}:</strong> <span class="text-primary">{{ group }}</span></p>#}
+{#            <p><strong>Kategori:</strong> <span class="text-primary">{{ group.kategori.nama_kategori }}</span></p>#}
+{#        </div>#}
+{#        <div class="col-md-6">#}
+{#            <p><strong>Tanggal Lahir:</strong> <span class="text-secondary">{{ group.tanggal_lahir }}</span></p>#}
+{#            <p><strong>Umur:</strong> <span class="text-secondary">{{ group.get_umur_terformat }}</span></p>#}
+{#            <p><strong>Jenis Kelamin:</strong> <span class="text-secondary">{{ group.jenis_kelamin }}</span></p>#}
+{#        </div>#}
+{#    </div>#}
+{##}
+{#    <!-- Fitur yang Tersedia -->#}
+{#    <h2 class="mb-4">Fitur yang Tersedia untuk {{ group.kategori.nama_kategori }} umur  {{ group.get_umur_terformat }}</h2>#}
+{#    <div class="row">#}
+{#        {% for fitur in fitur %}#}
+{#            <div class="col-md-12">#}
+{#                <h2 class="feature-title">{{ fitur.name }}</h2>#}
+{#                <div class="d-flex feature-item">#}
+{##}
+{#                    <!-- Kotak 1: Gambar -->#}
+{#                    <div class="kotak kotak-image">#}
+{#                        <img src="{{ fitur.image.url }}" alt="{{ fitur.name }}" class="feature-image">#}
+{#                    </div>#}
+{##}
+{#                    <!-- Kotak 2: Nama dan Deskripsi -->#}
+{#                    <div class="kotak kotak-data">#}
+{##}
+{#                        <p class="feature-description">Deskripsi : {{ fitur.description }}</p>#}
+{#                        <p class="feature-description">Syarat Umur (hari) : {{ fitur.min_age_in_days }} - {{ fitur.max_age_in_days }} Hari</p>#}
+{#                    </div>#}
+{##}
+{#                    <!-- Kotak 3: Data Terakhir -->#}
+{#                    <div class="kotak kotak-data">#}
+{#                        <h6 class="card-subtitle mb-2 text-muted">Data Terakhir:</h6>#}
+{#                        <p>{{ fitur.last_data }}</p>#}
+{#                    </div>#}
+{##}
+{#                    <!-- Kotak 4: Analisis -->#}
+{#                    <div class="kotak kotak-analisis">#}
+{#                        <h6 class="card-subtitle mb-2 text-muted">Analisis:</h6>#}
+{#                        <p>{{ fitur.analysis }}</p>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+{#            <!-- Tombol untuk menambah pengecekan baru -->#}
+{#    <div class="text-center mt-4">#}
+{#        <a href="{% url 'user_responses_app:start_checkup' feature_id=feature.id checkup_group_id=group_id %}" class="btn btn-success btn-lg">#}
+{#            <i class="fas fa-plus-circle"></i> start_checkup#}
+{#        </a>#}
+{#    </div>#}
+{#        {% endfor %}#}
+{#    </div>#}
+{##}
+{##}
+{#</div>#}
+{##}
+{#<!-- Bootstrap JS and dependencies -->#}
+{#<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz4fnFO9gyb8U4CwDdg2I+Nf2p4g8roYkdG9du4/tXzU1v4wvQQl5P3j9p" crossorigin="anonymous"></script>#}
+{#<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js" integrity="sha384-pzjw8f+ua7Kw1TIq0P3n7na2fDssCm5wh5p9gW5f5ELy4f9Hh7dle2e9bl6m8Y7P" crossorigin="anonymous"></script>#}
+{##}
+{#</body>#}
+{#</html>#}

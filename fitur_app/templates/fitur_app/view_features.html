@@ -1,0 +1,44 @@
+<!-- fitur_app/templates/fitur_app/view_features.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Features</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1 class="my-4">All Features</h1>
+
+        <!-- Tombol untuk Menambah Fitur Baru -->
+        <div class="mb-3">
+            <a href="{% url 'fitur_app:create_feature' %}" class="btn btn-success">Add New Feature</a>
+        </div>
+
+        <!-- Menampilkan Semua Fitur dalam Bentuk Card -->
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            {% for feature in features %}
+                <div class="col">
+                    <div class="card">
+                        <img src="{{ feature.image.url }}" class="card-img-top" alt="{{ feature.name }}" style="height: 200px; object-fit: cover;"> <!-- Gambar dengan ukuran kecil -->
+                        <div class="card-body">
+                            <h5 class="card-title">{{ feature.name }}</h5>
+                            <p class="card-text">{{ feature.description }}</p>
+                            <a href="{% url 'fitur_app:edit_feature' feature.pk %}" class="btn btn-warning btn-sm">Edit</a>
+                            <a href="{% url 'fitur_app:delete_feature' feature.pk %}" class="btn btn-danger btn-sm">Delete</a>
+                            <!-- Tombol Detail Feature dengan Icon -->
+                            <a href="{% url 'fitur_app:feature_detail' feature.pk %}" class="btn btn-info btn-sm">
+                                <i class="fas fa-info-circle"></i> Detail Feature
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

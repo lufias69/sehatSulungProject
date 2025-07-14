@@ -1,0 +1,7 @@
+<!-- alamat_app/templates/alamat_app/add_provinsi.html -->
+<h1>Tambah Provinsi</h1>
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Simpan</button>
+</form>
