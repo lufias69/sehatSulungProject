@@ -182,16 +182,17 @@ def checkup_group_create(request, kategori_id):
 
 
 # Mengedit kategori yang sudah ada
-# def checkup_category_update(request, category_id):
-#     category = get_object_or_404(CheckupCategory, id=category_id)
-#     if request.method == 'POST':
-#         form = CheckupCategoryForm(request.POST, instance=category)
-#         if form.is_valid():
-#             form.save()
-#             return redirect('fitur_app:checkup_category_list')  # Kembali ke daftar kategori setelah berhasil memperbarui
-#     else:
-#         form = CheckupCategoryForm(instance=category)
-#     return render(request, 'fitur_app/checkup_category_form.html', {'form': form})
+def checkup_category_update(request, category_id):
+    category = get_object_or_404(CheckupCategory, id=category_id)
+    print("masuk sini")
+    if request.method == 'POST':
+        form = CheckupCategoryForm(request.POST, instance=category)
+        if form.is_valid():
+            form.save()
+            return redirect('fitur_app:checkup_category_list')  # Kembali ke daftar kategori setelah berhasil memperbarui
+    else:
+        form = CheckupCategoryForm(instance=category)
+    return render(request, 'fitur_app/checkup_category_form.html', {'form': form})
 
 # Menghapus kategori
 @login_required

@@ -30,7 +30,8 @@ class CheckupGroupForm(forms.ModelForm):
             self.fields['kategori'].required = False
 
             # Menyesuaikan apakah Nama Ibu dan NIK Ibu harus ditampilkan
-            if kategori.nama_kategori == 'Balita':
+
+            if kategori.nama_kategori == 'Anak':
                 # Jika kategori Balita, maka NIK tidak diperlukan
                 self.fields['nik'].required = False
                 self.fields.pop('nik', None)  # Menghapus NIK dari form jika kategori Balita

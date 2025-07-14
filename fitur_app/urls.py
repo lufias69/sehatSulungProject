@@ -2,7 +2,7 @@
 
 from django.urls import path
 from . import views
-from checkup_app.views import checkup_category_update
+from fitur_app.views import checkup_category_update
 
 
 app_name = 'fitur_app'
