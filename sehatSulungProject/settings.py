@@ -29,7 +29,7 @@ SECRET_KEY = "django-insecure-v-_b*)$++itqwkcdj@3@eae4)^g(v@+mmjh_mp41@k0+o_-z37
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = True
-DEBUG = False#os.getenv('DJANGO_DEBUG', 'False') == 'False'
+DEBUG = True#os.getenv('DJANGO_DEBUG', 'False') == 'False'
 
 # ALLOWED_HOSTS = []
 ALLOWED_HOSTS = ['103.139.193.56', 'localhost', '127.0.0.1']#os.getenv('DJANGO_ALLOWED_HOSTS', '103.139.193.56:80','localhost').split(',')
@@ -169,28 +169,27 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.sqlite3",
-#         "NAME": BASE_DIR / "db.sqlite3",
-#     }
-# }
-
 import os
 
-# ...
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('POSTGRES_DB', 'sehatsulung'),         # default fallback
-        'USER': os.getenv('POSTGRES_USER', 'postgres'),
-        'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'superpassword'),
-        'HOST': os.getenv('POSTGRES_HOST', 'db'),         # sesuai nama service docker
-        'PORT': os.getenv('POSTGRES_PORT', '5432'),
+if DEBUG:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
     }
-}
+
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.getenv('POSTGRES_DB', 'sehatsulung'),         # default fallback
+            'USER': os.getenv('POSTGRES_USER', 'postgres'),
+            'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'superpassword'),
+            'HOST': os.getenv('POSTGRES_HOST', 'db'),         # sesuai nama service docker
+            'PORT': os.getenv('POSTGRES_PORT', '5432'),
+        }
+    }
 
 
 
