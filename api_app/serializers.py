@@ -1,7 +1,7 @@
 # nama_aplikasi_anda/serializers.py
 from rest_framework import serializers
 
-from alamat_app.models import Provinsi, KabupatenKota, Kecamatan
+from alamat_app.models import Provinsi, KabupatenKota, Kecamatan, Desa
 from fitur_app.models import CheckupCategory, Feature
 from hash_app.models import TableHash, ModifiedTableHash
 from question_app.models import QuestionType, QuestionCategory, Question, Choice
@@ -70,6 +70,11 @@ class KabupatenKotaSerializer(serializers.ModelSerializer):
 class KecamatanSerializer(serializers.ModelSerializer):
     class Meta:
         model = Kecamatan
+        fields = '__all__'
+
+class DesaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Desa
         fields = '__all__'
 
 class ModifiedTableHashSerializer(serializers.ModelSerializer):

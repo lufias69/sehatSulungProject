@@ -5,7 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ee7f7c07-17a9-4434-a243-9398d058ed3e" name="Changes" comment="docker">
-      <change beforePath="$PROJECT_DIR$/sehatSulungProject/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/sehatSulungProject/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api_app/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/api_app/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api_app/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/api_app/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api_app/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/api_app/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -163,7 +166,7 @@
       <workItem from="1752318304536" duration="937000" />
       <workItem from="1752319497355" duration="453000" />
       <workItem from="1752320708162" duration="36970000" />
-      <workItem from="1752539381253" duration="1644000" />
+      <workItem from="1752539381253" duration="4050000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <option name="closed" value="true" />
