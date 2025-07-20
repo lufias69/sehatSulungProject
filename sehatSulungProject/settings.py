@@ -36,6 +36,19 @@ ALLOWED_HOSTS = ['103.139.193.56', 'localhost', '127.0.0.1']#os.getenv('DJANGO_A
 
 # Application definition
 
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:8081",
+    "http://localhost:8082",
+    "http://localhost:8083",
+    "http://localhost:8084",
+    "http://127.0.0.1:3000",
+    "http://103.139.193.56",
+    'http://127.0.0.1:8000'
+    # domain frontend-mu
+]
+
+CORS_ALLOW_ALL_ORIGINS = True
+
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -43,6 +56,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    'corsheaders',
     'admin_app.apps.AdminAppConfig',
     'rest_framework_simplejwt',
     "regional_data_app.apps.RegionalDataAppConfig",
@@ -118,6 +132,7 @@ SIMPLE_JWT = {
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    'corsheaders.middleware.CorsMiddleware',
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",

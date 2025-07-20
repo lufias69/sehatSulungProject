@@ -12,6 +12,7 @@ services:
       - "8000"
     depends_on:
       - db
+    restart: unless-stopped   # Tambahkan restart policy
 
   db:
     image: postgres:14
@@ -24,6 +25,7 @@ services:
       - postgres_data:/var/lib/postgresql/data/
     ports:
       - "5432:5432"  # ← ini wajib ditambahkan
+    restart: unless-stopped   # Tambahkan restart policy
 
   nginx:
     image: nginx:latest
@@ -35,6 +37,7 @@ services:
       - .:/app
     depends_on:
       - web
+    restart: unless-stopped   # Tambahkan restart policy
 
 volumes:
   postgres_data:
